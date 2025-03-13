@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TasksApi.Models;
+using TasksApi.Repositories;
 
 namespace TasksApi.Controllers
 {
@@ -13,25 +14,27 @@ namespace TasksApi.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IRepository<Models.Task> _repository;
 
-        public TasksController(AppDbContext context)
+        public TasksController(IRepository<Models.Task> repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Tasks
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
         {
-            return await _context.Tasks.ToListAsync();
+            // TODO SB: Verify this.
+            var tasks = await _repository.GetAllAsync();
+            return Ok(tasks);
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Models.Task>> GetTask(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var task = await _repository.GetByIdAsync(id);
 
             if (task == null)
             {
@@ -77,8 +80,8 @@ namespace TasksApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
         {
-            _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
+            await _repository.AddAsync(task);
+            await _repository.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
