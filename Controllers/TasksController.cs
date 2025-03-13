@@ -9,50 +9,49 @@ using TasksApi.Models;
 
 namespace TasksApi.Controllers
 {
-    // [Route("api/[controller]")]
-    [Route("api/TaskItems")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class TaskItemsController : ControllerBase
+    public class TasksController : ControllerBase
     {
-        private readonly TaskItemsContext _context;
+        private readonly AppDbContext _context;
 
-        public TaskItemsController(TaskItemsContext context)
+        public TasksController(AppDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskItem>>> GetTaskItems()
+        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
         {
-            return await _context.TaskItems.ToListAsync();
+            return await _context.Tasks.ToListAsync();
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskItem>> GetTaskItem(int id)
+        public async Task<ActionResult<Models.Task>> GetTask(int id)
         {
-            var taskItem = await _context.TaskItems.FindAsync(id);
+            var task = await _context.Tasks.FindAsync(id);
 
-            if (taskItem == null)
+            if (task == null)
             {
                 return NotFound();
             }
 
-            return taskItem;
+            return task;
         }
 
         // PUT: api/Tasks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTaskItem(int id, TaskItem taskItem)
+        public async Task<IActionResult> PutTask(int id, Models.Task task)
         {
-            if (id != taskItem.Id)
+            if (id != task.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(taskItem).State = EntityState.Modified;
+            _context.Entry(task).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +59,7 @@ namespace TasksApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TaskItemExists(id))
+                if (!TaskExists(id))
                 {
                     return NotFound();
                 }
@@ -76,34 +75,33 @@ namespace TasksApi.Controllers
         // POST: api/Tasks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TaskItem>> PostTaskItem(TaskItem taskItem)
+        public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
         {
-            _context.TaskItems.Add(taskItem);
+            _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
-            // return CreatedAtAction("GetTaskItem", new { id = taskItem.Id }, taskItem);
-            return CreatedAtAction(nameof(GetTaskItem), new { id = taskItem.Id }, taskItem);
+            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
 
         // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTaskItem(int id)
+        public async Task<IActionResult> DeleteTask(int id)
         {
-            var taskItem = await _context.TaskItems.FindAsync(id);
-            if (taskItem == null)
+            var task = await _context.Tasks.FindAsync(id);
+            if (task == null)
             {
                 return NotFound();
             }
 
-            _context.TaskItems.Remove(taskItem);
+            _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TaskItemExists(int id)
+        private bool TaskExists(int id)
         {
-            return _context.TaskItems.Any(e => e.Id == id);
+            return _context.Tasks.Any(e => e.Id == id);
         }
     }
 }
