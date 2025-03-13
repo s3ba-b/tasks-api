@@ -20,14 +20,12 @@ namespace TasksApi.Controllers
             _context = context;
         }
 
-        // GET: api/Tasks
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
         {
             return await _context.Tasks.ToListAsync();
         }
 
-        // GET: api/Tasks/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Models.Task>> GetTask(int id)
         {
@@ -41,8 +39,6 @@ namespace TasksApi.Controllers
             return task;
         }
 
-        // PUT: api/Tasks/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(int id, Models.Task task)
         {
@@ -72,8 +68,6 @@ namespace TasksApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Tasks
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
         {
@@ -83,7 +77,6 @@ namespace TasksApi.Controllers
             return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
 
-        // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
