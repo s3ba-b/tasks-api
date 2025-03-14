@@ -12,8 +12,8 @@ namespace TasksApi.Services
 
         public TaskSchedulerService(IRepository<Models.Task> repository, ILogger<TaskSchedulerService> logger)
         {
-            _repository = repository;
-            _logger = logger;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async System.Threading.Tasks.Task CheckDueTasksAsync()

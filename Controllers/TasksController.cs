@@ -19,10 +19,8 @@ namespace TasksApi.Controllers
 
         public TasksController(IRepository<Models.Task> repository)
         {
-            _repository = repository;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
-
-
 
         [HttpPost]
         public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
@@ -53,7 +51,6 @@ namespace TasksApi.Controllers
             return Ok(task);
         }
 
-        // TODO SB: Verify corectness of this method.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(int id, Models.Task task)
         {
@@ -74,10 +71,8 @@ namespace TasksApi.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                return Conflict("The task was modified by another request. Please refresh and try again.");
             }
 
             return NoContent();
