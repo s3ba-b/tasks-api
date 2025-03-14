@@ -36,7 +36,7 @@ namespace TasksApi.Controllers
                 return NotFound();
             }
 
-            return task;
+            return Ok(task);
         }
 
         [HttpPut("{id}")]
