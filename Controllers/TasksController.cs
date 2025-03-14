@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TasksApi.Data;
 using TasksApi.Models;
+using TasksApi.Repositories;
 
 namespace TasksApi.Controllers
 {
@@ -13,23 +15,35 @@ namespace TasksApi.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IRepository<Models.Task> _repository;
 
-        public TasksController(AppDbContext context)
+        public TasksController(IRepository<Models.Task> repository)
         {
-            _context = context;
+            _repository = repository;
+        }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
+        {
+            await _repository.AddAsync(task);
+            await _repository.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
         {
-            return await _context.Tasks.ToListAsync();
+            var tasks = await _repository.GetAllAsync();
+            return Ok(tasks);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Models.Task>> GetTask(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var task = await _repository.GetByIdAsync(id);
 
             if (task == null)
             {
@@ -39,6 +53,7 @@ namespace TasksApi.Controllers
             return Ok(task);
         }
 
+        // TODO SB: Verify corectness of this method.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(int id, Models.Task task)
         {
@@ -47,15 +62,15 @@ namespace TasksApi.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(task).State = EntityState.Modified;
+            _repository.Update(task);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TaskExists(id))
+                if (!await _repository.ExistsAsync(id))
                 {
                     return NotFound();
                 }
@@ -68,33 +83,19 @@ namespace TasksApi.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
-        {
-            _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var task = await _repository.GetByIdAsync(id);
             if (task == null)
             {
                 return NotFound();
             }
 
-            _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
+            _repository.Remove(task);
+            await _repository.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool TaskExists(int id)
-        {
-            return _context.Tasks.Any(e => e.Id == id);
         }
     }
 }

@@ -1,7 +1,8 @@
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.EntityFrameworkCore;
-using TasksApi.Models;
+using TasksApi.Data;
+using TasksApi.Repositories;
 using TasksApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ builder.Services.AddHangfire(config =>
 builder.Services.AddHangfireServer();
 
 builder.Services.AddTransient<ITaskSchedulerService, TaskSchedulerService>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 

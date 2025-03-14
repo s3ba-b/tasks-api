@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace TasksApi.Models
+namespace TasksApi.Data
 {
     // TODO SB: Think about the name...
     public class AppDbContext : DbContext
@@ -10,6 +10,6 @@ namespace TasksApi.Models
         {
         }
 
-        public DbSet<Task> Tasks { get; set; } = null!;
+        public DbSet<Models.Task> Tasks { get; set; } = null!;
     }
 }

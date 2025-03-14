@@ -1,22 +1,24 @@
 using Microsoft.EntityFrameworkCore;
+using TasksApi.Data;
 using TasksApi.Models;
+using TasksApi.Repositories;
 
 namespace TasksApi.Services
 {
     public class TaskSchedulerService : ITaskSchedulerService
     {
-        private readonly AppDbContext _context;
+        private readonly IRepository<Models.Task> _repository;
         private readonly ILogger<ITaskSchedulerService> _logger;
 
-        public TaskSchedulerService(AppDbContext context, ILogger<TaskSchedulerService> logger)
+        public TaskSchedulerService(IRepository<Models.Task> repository, ILogger<TaskSchedulerService> logger)
         {
-            _context = context;
+            _repository = repository;
             _logger = logger;
         }
 
         public async System.Threading.Tasks.Task CheckDueTasksAsync()
         {
-            var tasks = await _context.Tasks.ToListAsync();
+            var tasks = await _repository.GetAllAsync();
 
             DateTime threshold = DateTime.UtcNow.AddHours(2);
 

@@ -43,7 +43,7 @@ This project is a simple **Task Management API** that provides CRUD operations f
 
 ## Task Reminder System
 - The system periodically checks for tasks with upcoming deadlines.
-- If a task is due within **1 hour**, a reminder is sent.
+- If a task is due within **2 hours**, a reminder is sent.
 - Hangfire manages scheduled jobs for sending these notifications.
 
 ## Contributing
