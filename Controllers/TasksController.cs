@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,29 +35,24 @@ namespace TasksApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks([FromQuery] TaskQueryParameters query)
         {
-            var tasks = await _repository.GetAllAsync();
+            Expression<Func<Models.Task, bool>> filter = p =>
+        (!query.MinDueTime.HasValue || p.DueTime >= query.MinDueTime.Value) &&
+        (!query.MaxDueTime.HasValue || p.DueTime <= query.MaxDueTime.Value) &&
+        (!query.IsComplete.HasValue || p.IsComplete == query.IsComplete.Value);
 
-            if (query.MinDueTime.HasValue)
-            {
-                tasks = tasks.Where(p => p.DueTime >= query.MinDueTime.Value);
-            }
+            var tasks = await _repository.FindAsync(filter);
 
-            if (query.MaxDueTime.HasValue)
+            if (!query.PageNumber.HasValue || !query.PageSize.HasValue)
             {
-                tasks = tasks.Where(p => p.DueTime <= query.MaxDueTime.Value);
-            }
-
-            if (query.IsComplete.HasValue)
-            {
-                tasks = tasks.Where(p => p.IsComplete == query.IsComplete.Value);
+                return Ok(tasks);
             }
 
             var totalItems = tasks.Count();
-            var totalPages = (int)Math.Ceiling(totalItems / (double)query.PageSize);
+            var totalPages = (int)Math.Ceiling(totalItems / (double)query.PageSize.Value);
             var pagedTasks = tasks
-            .Skip((query.PageNumber - 1) * query.PageSize)
-            .Take(query.PageSize)
-            .ToList();
+                .Skip((query.PageNumber.Value - 1) * query.PageSize.Value)
+                .Take(query.PageSize.Value)
+                .ToList();
 
             var paginationMetadata = new
             {
@@ -70,6 +66,7 @@ namespace TasksApi.Controllers
 
             return Ok(pagedTasks);
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Models.Task>> GetTask(int id)
