@@ -49,7 +49,7 @@ using (var scope = app.Services.CreateScope())
     recurringJobManager.AddOrUpdate(
         "my-job",
         () => taskChecker.CheckDueTasksAsync(),
-        Cron.Minutely);
+        Cron.Hourly);
 }
 
 app.Run();
