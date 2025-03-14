@@ -68,7 +68,27 @@ void SeedData(AppDbContext context)
             new TasksApi.Models.Task { Id = 7, Title = "Walk the dog", Description = "Take the dog for a walk", DueTime = DateTime.UtcNow.AddDays(3), IsComplete = false },
             new TasksApi.Models.Task { Id = 8, Title = "Water the plants", Description = "Water the indoor and outdoor plants", DueTime = DateTime.UtcNow.AddDays(4), IsComplete = false },
             new TasksApi.Models.Task { Id = 9, Title = "Vacuum the house", Description = "Vacuum the floors and clean the carpets", DueTime = DateTime.UtcNow.AddDays(5), IsComplete = false },
-            new TasksApi.Models.Task { Id = 10, Title = "Dust the furniture", Description = "Dust the furniture and clean the surfaces", DueTime = DateTime.UtcNow.AddHours(3), IsComplete = false }
+            new TasksApi.Models.Task { Id = 10, Title = "Dust the furniture", Description = "Dust the furniture and clean the surfaces", DueTime = DateTime.UtcNow.AddHours(3), IsComplete = false },
+            new TasksApi.Models.Task { Id = 11, Title = "Read a book", Description = "Read the new novel", DueTime = DateTime.UtcNow.AddDays(6), IsComplete = false },
+            new TasksApi.Models.Task { Id = 12, Title = "Write a report", Description = "Write the monthly report", DueTime = DateTime.UtcNow.AddDays(7), IsComplete = false },
+            new TasksApi.Models.Task { Id = 13, Title = "Exercise", Description = "Go for a run", DueTime = DateTime.UtcNow.AddDays(8), IsComplete = false },
+            new TasksApi.Models.Task { Id = 14, Title = "Cook dinner", Description = "Prepare a healthy meal", DueTime = DateTime.UtcNow.AddDays(9), IsComplete = false },
+            new TasksApi.Models.Task { Id = 15, Title = "Call mom", Description = "Catch up with mom", DueTime = DateTime.UtcNow.AddDays(10), IsComplete = false },
+            new TasksApi.Models.Task { Id = 16, Title = "Pay bills", Description = "Pay the monthly bills", DueTime = DateTime.UtcNow.AddDays(11), IsComplete = false },
+            new TasksApi.Models.Task { Id = 17, Title = "Plan vacation", Description = "Plan the summer vacation", DueTime = DateTime.UtcNow.AddDays(12), IsComplete = false },
+            new TasksApi.Models.Task { Id = 18, Title = "Organize closet", Description = "Organize the closet and donate old clothes", DueTime = DateTime.UtcNow.AddDays(13), IsComplete = false },
+            new TasksApi.Models.Task { Id = 19, Title = "Fix the sink", Description = "Fix the leaky sink", DueTime = DateTime.UtcNow.AddDays(14), IsComplete = false },
+            new TasksApi.Models.Task { Id = 20, Title = "Attend meeting", Description = "Attend the team meeting", DueTime = DateTime.UtcNow.AddDays(15), IsComplete = false },
+            new TasksApi.Models.Task { Id = 21, Title = "Write blog post", Description = "Write a new blog post", DueTime = DateTime.UtcNow.AddDays(16), IsComplete = false },
+            new TasksApi.Models.Task { Id = 22, Title = "Meditate", Description = "Meditate for 20 minutes", DueTime = DateTime.UtcNow.AddDays(17), IsComplete = false },
+            new TasksApi.Models.Task { Id = 23, Title = "Grocery shopping", Description = "Buy groceries for the week", DueTime = DateTime.UtcNow.AddDays(18), IsComplete = false },
+            new TasksApi.Models.Task { Id = 24, Title = "Clean garage", Description = "Clean and organize the garage", DueTime = DateTime.UtcNow.AddDays(19), IsComplete = false },
+            new TasksApi.Models.Task { Id = 25, Title = "Car maintenance", Description = "Take the car for maintenance", DueTime = DateTime.UtcNow.AddDays(20), IsComplete = false },
+            new TasksApi.Models.Task { Id = 26, Title = "Study", Description = "Study for the upcoming exam", DueTime = DateTime.UtcNow.AddDays(21), IsComplete = false },
+            new TasksApi.Models.Task { Id = 27, Title = "Practice guitar", Description = "Practice guitar for 30 minutes", DueTime = DateTime.UtcNow.AddDays(22), IsComplete = false },
+            new TasksApi.Models.Task { Id = 28, Title = "Bake cookies", Description = "Bake chocolate chip cookies", DueTime = DateTime.UtcNow.AddDays(23), IsComplete = false },
+            new TasksApi.Models.Task { Id = 29, Title = "Watch movie", Description = "Watch a new movie", DueTime = DateTime.UtcNow.AddDays(24), IsComplete = false },
+            new TasksApi.Models.Task { Id = 30, Title = "Call friend", Description = "Catch up with an old friend", DueTime = DateTime.UtcNow.AddDays(25), IsComplete = false }
         );
         context.SaveChanges();
     }

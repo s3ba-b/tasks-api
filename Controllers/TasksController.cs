@@ -51,7 +51,24 @@ namespace TasksApi.Controllers
                 tasks = tasks.Where(p => p.IsComplete == query.IsComplete.Value);
             }
 
-            return Ok(tasks);
+            var totalItems = tasks.Count();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)query.PageSize);
+            var pagedTasks = tasks
+            .Skip((query.PageNumber - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToList();
+
+            var paginationMetadata = new
+            {
+                totalItems,
+                totalPages,
+                query.PageSize,
+                query.PageNumber
+            };
+
+            Response.Headers.Append("X-Pagination", System.Text.Json.JsonSerializer.Serialize(paginationMetadata));
+
+            return Ok(pagedTasks);
         }
 
         [HttpGet("{id}")]
