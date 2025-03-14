@@ -32,9 +32,25 @@ namespace TasksApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks([FromQuery] TaskQueryParameters query)
         {
             var tasks = await _repository.GetAllAsync();
+
+            if (query.MinDueTime.HasValue)
+            {
+                tasks = tasks.Where(p => p.DueTime >= query.MinDueTime.Value);
+            }
+
+            if (query.MaxDueTime.HasValue)
+            {
+                tasks = tasks.Where(p => p.DueTime <= query.MaxDueTime.Value);
+            }
+
+            if (query.IsComplete.HasValue)
+            {
+                tasks = tasks.Where(p => p.IsComplete == query.IsComplete.Value);
+            }
+
             return Ok(tasks);
         }
 
